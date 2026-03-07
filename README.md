@@ -32,23 +32,75 @@ A powerful OpenCode plugin for tracking and debugging session execution, prompt 
 
 \* *Note: Command tracking is limited to start events only. See [Known Limitations](#known-limitations) for details.*
 
+## Prerequisites
+
+Before installing this plugin, you need:
+
+1. **OpenCode CLI installed** on your system:
+   ```bash
+   npm install -g @opencode-ai/cli
+   # or
+   bun install -g @opencode-ai/cli
+   ```
+
+2. **A project with OpenCode configuration** - The plugin must be installed in your project's `.opencode/` directory.
+
 ## Quick Start
 
+### For Existing OpenCode Projects
+
 ```bash
+# Navigate to your project's .opencode directory
+cd /path/to/your/project/.opencode
+
 # Install the plugin
 npm install opencode-session-debugger
 
 # Enable in your OpenCode config
-echo '{"plugin": ["opencode-session-debugger"]}' > .opencode/opencode.jsonc
+echo '{"plugin": ["opencode-session-debugger"]}' > opencode.jsonc
 
-# Start OpenCode and use it normally
+# Go back to project root and start OpenCode
+cd ..
 opencode
 
-# View logged sessions
+# View logged sessions (from anywhere)
 opencode-debug list
 
 # Analyze a specific session
 opencode-debug analyze ses_abc123
+```
+
+### For New Projects (Starting from Scratch)
+
+```bash
+# Create your project directory
+mkdir my-project
+cd my-project
+
+# Create and set up .opencode directory
+mkdir -p .opencode
+cd .opencode
+
+# Initialize npm (creates package.json)
+npm init -y
+
+# Install the plugin
+npm install opencode-session-debugger
+
+# Create OpenCode configuration
+cat > opencode.jsonc << 'EOF'
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-session-debugger"]
+}
+EOF
+
+# Go back to project root and start OpenCode
+cd ..
+opencode
+
+# View logged sessions (from anywhere)
+opencode-debug list
 ```
 
 ## Installation
@@ -57,8 +109,31 @@ opencode-debug analyze ses_abc123
 
 > **Note**: This package is not yet published to NPM. Use the "From Source" method below.
 
+**Step 1: Navigate to your project's `.opencode/` directory**
+
+```bash
+cd /path/to/your/project/.opencode
+
+# If .opencode doesn't exist, create it first:
+# mkdir -p .opencode && cd .opencode
+# npm init -y
+```
+
+**Step 2: Install the plugin**
+
 ```bash
 npm install opencode-session-debugger
+```
+
+**Step 3: Enable the plugin**
+
+Add to `.opencode/opencode.jsonc` (or create it):
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-session-debugger"]
+}
 ```
 
 ### From Source (Development)
