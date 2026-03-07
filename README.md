@@ -81,8 +81,14 @@ cd my-project
 mkdir -p .opencode
 cd .opencode
 
-# Initialize npm (creates package.json)
-npm init -y
+# Create package.json (npm init -y fails because of dot in directory name)
+cat > package.json << 'EOF'
+{
+  "name": "opencode-config",
+  "version": "1.0.0",
+  "private": true
+}
+EOF
 
 # Install the plugin
 npm install opencode-session-debugger
@@ -114,9 +120,9 @@ opencode-debug list
 ```bash
 cd /path/to/your/project/.opencode
 
-# If .opencode doesn't exist, create it first:
+# If .opencode doesn't exist, create it first and set up package.json:
 # mkdir -p .opencode && cd .opencode
-# npm init -y
+# echo '{"name":"opencode-config","version":"1.0.0","private":true}' > package.json
 ```
 
 **Step 2: Install the plugin**
@@ -697,6 +703,25 @@ tail -f ~/.local/share/opencode-debug/plugin-errors.log
 > **Note**: Simply running `npm install` without removing the plugin first may not update it due to npm's file dependency caching.
 
 ## Troubleshooting
+
+### npm init -y fails with "Invalid name: .opencode"
+
+**Problem**: Running `npm init -y` inside `.opencode/` directory fails because npm doesn't allow package names starting with a dot.
+
+**Solution**: Manually create `package.json` instead:
+
+```bash
+cd .opencode
+cat > package.json << 'EOF'
+{
+  "name": "opencode-config",
+  "version": "1.0.0",
+  "private": true
+}
+EOF
+```
+
+Then proceed with `npm install opencode-session-debugger`.
 
 ### Plugin not logging anything
 
