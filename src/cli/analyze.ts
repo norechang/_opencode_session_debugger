@@ -120,12 +120,20 @@ async function main() {
           console.log('No sessions found.');
         } else {
           for (const session of sessions) {
-            const date = new Date(session.createdAt).toLocaleDateString();
-            const time = new Date(session.createdAt).toLocaleTimeString();
+            // Format timestamp consistently with debug logger: YYYY-MM-DD HH:MM:SS
+            const now = new Date(session.createdAt);
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timestamp = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            
             console.log(`${session.id}`);
             console.log(`  Title: ${session.title}`);
             console.log(`  Agent: ${session.agent}`);
-            console.log(`  Created: ${date} ${time}`);
+            console.log(`  Created: ${timestamp}`);
             console.log('');
           }
           console.log(`Total: ${sessions.length} sessions`);
