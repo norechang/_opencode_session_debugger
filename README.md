@@ -64,8 +64,10 @@ curl -fsSL https://raw.githubusercontent.com/norechang/_opencode_session_debugge
 # Start OpenCode
 opencode
 
-# View logged sessions
-opencode-debug list
+# View logged sessions (use npx from .opencode directory)
+cd .opencode
+npx opencode-debug list
+npx opencode-debug analyze ses_abc123
 ```
 
 ### Manual Installation - Existing OpenCode Projects
@@ -84,11 +86,10 @@ echo '{"plugin": ["opencode-session-debugger"]}' > opencode.jsonc
 cd ..
 opencode
 
-# View logged sessions (from anywhere)
-opencode-debug list
-
-# Analyze a specific session
-opencode-debug analyze ses_abc123
+# View logged sessions (use npx from .opencode directory)
+cd .opencode
+npx opencode-debug list
+npx opencode-debug analyze ses_abc123
 ```
 
 ### Manual Installation - New Projects (Starting from Scratch)
@@ -126,8 +127,9 @@ EOF
 cd ..
 opencode
 
-# View logged sessions (from anywhere)
-opencode-debug list
+# View logged sessions (use npx from .opencode directory)
+cd .opencode
+npx opencode-debug list
 ```
 
 ## Installation
@@ -237,7 +239,68 @@ Add to your `.opencode/opencode.jsonc` (or `.opencode/opencode.json`) in your pr
 
 > **Note**: The configuration file should be at `.opencode/opencode.jsonc` (or `.opencode/opencode.json`) relative to your project root.
 
-### 2. Configure (Optional)
+### 2. Start OpenCode
+
+The plugin will automatically start logging session data:
+
+```bash
+opencode
+```
+
+### 3. Using the CLI Tool
+
+The `opencode-debug` CLI command is installed when you install the plugin. Depending on how you installed it, there are different ways to access it:
+
+#### Option 1: Using npx (Recommended for local installations)
+
+```bash
+# From your project's .opencode directory
+cd /path/to/your/project/.opencode
+npx opencode-debug list
+npx opencode-debug analyze ses_abc123
+```
+
+#### Option 2: Direct path (from project root)
+
+```bash
+# From your project root
+.opencode/node_modules/.bin/opencode-debug list
+.opencode/node_modules/.bin/opencode-debug analyze ses_abc123
+```
+
+#### Option 3: Global installation (if installed globally)
+
+If you installed the plugin globally with `npm install -g opencode-session-debugger`:
+
+```bash
+# From anywhere
+opencode-debug list
+opencode-debug analyze ses_abc123
+```
+
+#### Option 4: Add npm scripts to your .opencode/package.json
+
+```json
+{
+  "name": "opencode-config",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "debug": "opencode-debug",
+    "debug:list": "opencode-debug list",
+    "debug:analyze": "opencode-debug analyze"
+  }
+}
+```
+
+Then use:
+```bash
+cd .opencode
+npm run debug list
+npm run debug:analyze ses_abc123
+```
+
+### 4. Configure the Plugin (Optional)
 
 Customize plugin behavior in `.opencode/opencode.jsonc`:
 
@@ -306,6 +369,12 @@ opencode-debug export ses_abc123 > session.json
 
 ## CLI Commands
 
+> **Note**: All examples below assume you're running from your project's `.opencode` directory using `npx opencode-debug`. 
+> 
+> Alternatively, you can:
+> - Use the full path: `.opencode/node_modules/.bin/opencode-debug` (from project root)
+> - Install globally: `npm install -g opencode-session-debugger` and use `opencode-debug` from anywhere
+
 ### `analyze <session-id>`
 
 Show comprehensive analysis of a session including:
@@ -317,7 +386,8 @@ Show comprehensive analysis of a session including:
 - Complete timeline
 
 ```bash
-opencode-debug analyze ses_abc123
+cd .opencode
+npx opencode-debug analyze ses_abc123
 ```
 
 ### `list [options]`
@@ -325,17 +395,19 @@ opencode-debug analyze ses_abc123
 List sessions with optional filters:
 
 ```bash
+cd .opencode
+
 # List all sessions
-opencode-debug list
+npx opencode-debug list
 
 # Filter by agent
-opencode-debug list --agent build
+npx opencode-debug list --agent build
 
 # Filter by directory
-opencode-debug list --directory my-project
+npx opencode-debug list --directory my-project
 
 # Limit results
-opencode-debug list --limit 10
+npx opencode-debug list --limit 10
 ```
 
 ### `tools <session-id> [options]`
@@ -343,17 +415,19 @@ opencode-debug list --limit 10
 Show tool execution statistics:
 
 ```bash
+cd .opencode
+
 # Basic tool stats
-opencode-debug tools ses_abc123
+npx opencode-debug tools ses_abc123
 
 # Show only slow tools (>5 seconds)
-opencode-debug tools ses_abc123 --min-duration 5000
+npx opencode-debug tools ses_abc123 --min-duration 5000
 
 # Show only failed tools
-opencode-debug tools ses_abc123 --has-errors
+npx opencode-debug tools ses_abc123 --has-errors
 
 # Verbose output with individual tool calls
-opencode-debug tools ses_abc123 --verbose
+npx opencode-debug tools ses_abc123 --verbose
 ```
 
 ### `agents <session-id> [options]`
