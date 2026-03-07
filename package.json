@@ -7,11 +7,25 @@
   "bin": {
     "opencode-debug": "./dist/cli/analyze.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "API.md",
+    "opencode.example.jsonc"
+  ],
   "scripts": {
     "build": "tsc && node scripts/postbuild.js",
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/norechang/_opencode_session_debugger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/norechang/_opencode_session_debugger/issues"
+  },
+  "homepage": "https://github.com/norechang/_opencode_session_debugger#readme",
   "keywords": [
     "opencode",
     "plugin",
@@ -20,7 +34,7 @@
     "session",
     "agent"
   ],
-  "author": "",
+  "author": "norechang",
   "license": "MIT",
   "dependencies": {
     "drizzle-orm": "^0.36.0",

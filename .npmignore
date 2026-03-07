@@ -1,0 +1,44 @@
+# Source files (we only want to publish the compiled dist/)
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Development files
+test-integration.ts
+scripts/
+
+# Documentation (optional - you may want to include some of these)
+DEVELOPMENT.md
+BUG-FIXES.md
+COMMAND-TRACKING-FEATURE.md
+ERROR-LOGGING-SUMMARY.md
+SUMMARY.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# Git
+.git/
+.gitignore
