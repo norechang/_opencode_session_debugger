@@ -47,7 +47,28 @@ Before installing this plugin, you need:
 
 ## Quick Start
 
-### For Existing OpenCode Projects
+### Easy Installation (Recommended)
+
+Use the installation script to automatically set up everything:
+
+```bash
+# Navigate to your project directory
+cd /path/to/your/project
+
+# Download and run the installation script
+curl -fsSL https://raw.githubusercontent.com/norechang/_opencode_session_debugger/main/install-plugin.sh | bash
+
+# Or if you've cloned the repo:
+# bash /path/to/opencode-session-debugger/install-plugin.sh
+
+# Start OpenCode
+opencode
+
+# View logged sessions
+opencode-debug list
+```
+
+### Manual Installation - Existing OpenCode Projects
 
 ```bash
 # Navigate to your project's .opencode directory
@@ -70,7 +91,7 @@ opencode-debug list
 opencode-debug analyze ses_abc123
 ```
 
-### For New Projects (Starting from Scratch)
+### Manual Installation - New Projects (Starting from Scratch)
 
 ```bash
 # Create your project directory
