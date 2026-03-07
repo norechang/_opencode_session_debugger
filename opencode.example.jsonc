@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-session-debugger"],
+  "opencode-session-debugger": {
+    "enabled": true,
+    "logLevel": "info",
+    "storage": {
+      "type": "sqlite",
+      "path": ".opencode/debug/sessions.db"
+    },
+    "capture": {
+      "prompts": true,
+      "tools": true,
+      "agents": true,
+      "skills": true,
+      "messages": true,
+      "events": true
+    },
+    "redact": {
+      "secrets": true,
+      "apiKeys": true,
+      "fileContents": false
+    }
+  }
+}
