@@ -58,7 +58,20 @@ export function createToolHooks(logger: SessionLogger) {
      */
     handleAfter: async (input: any, output: any) => {
       try {
-        const { sessionID, messageID, tool, result, error } = input;
+        const { sessionID, messageID, tool, result, error, args } = input;
+        
+        // If this is the skill tool, log skill usage
+        if (tool === 'skill' && args?.name) {
+          logger.logSkillUsage({
+            sessionID,
+            messageID,
+            skillName: args.name,
+            skillSource: 'built-in',
+            skillPath: undefined,
+            content: undefined,
+            description: undefined,
+          });
+        }
         
         // Try to get toolExecutionID from output or reconstruct key
         let toolExecutionID = output?.toolExecutionID;
