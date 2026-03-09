@@ -23,6 +23,7 @@ const commands = {
   skills: 'Show skill usage statistics',
   timeline: 'Show session timeline',
   export: 'Export session data as JSON',
+  reset: 'Clear all trace records from the database',
   help: 'Show this help message',
 };
 
@@ -40,6 +41,7 @@ function showHelp() {
   console.log('  opencode-debug commands ses_abc123 --min-duration 500');
   console.log('  opencode-debug timeline ses_abc123');
   console.log('  opencode-debug export ses_abc123 > session.json');
+  console.log('  opencode-debug reset --confirm');
   console.log('');
 }
 
@@ -287,6 +289,21 @@ async function main() {
 
         const data = analyzer.exportSession(sessionID);
         console.log(JSON.stringify(data, null, 2));
+        break;
+      }
+
+      case 'reset': {
+        if (!options.confirm) {
+          console.error('Error: --confirm flag required to reset database');
+          console.log('Usage: opencode-debug reset --confirm');
+          console.log('\nWARNING: This will delete ALL trace records from the database.');
+          console.log('This action cannot be undone.');
+          process.exit(1);
+        }
+
+        console.log('Clearing all trace records...');
+        db.clearAllData();
+        console.log('All trace records have been cleared.');
         break;
       }
 
