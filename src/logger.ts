@@ -31,27 +31,43 @@ export class SessionLogger {
     // Get storage path, fallback to undefined to let DatabaseManager use default
     const storagePath = config?.storage?.path;
     
+    // Support environment variables for configuration
+    // Environment variables override config file settings
+    const enabled = process.env.OPENCODE_DEBUG_ENABLED 
+      ? process.env.OPENCODE_DEBUG_ENABLED === 'true' 
+      : (config?.enabled ?? true);
+    
+    const logLevel = (process.env.OPENCODE_DEBUG_LOG_LEVEL as 'debug' | 'info' | 'warn' | 'error') 
+      || config?.logLevel 
+      || 'info';
+    
     return {
-      enabled: config?.enabled ?? true,
-      logLevel: config?.logLevel ?? 'info',
+      enabled,
+      logLevel,
       storage: {
         type: config?.storage?.type ?? 'sqlite',
         path: storagePath, // Can be undefined, DatabaseManager will use default
       },
       capture: {
-        prompts: config?.capture?.prompts ?? true,
-        tools: config?.capture?.tools ?? true,
-        agents: config?.capture?.agents ?? true,
-        skills: config?.capture?.skills ?? true,
-        messages: config?.capture?.messages ?? true,
-        events: config?.capture?.events ?? true,
+        prompts: this.getEnvBoolean('OPENCODE_DEBUG_CAPTURE_PROMPTS', config?.capture?.prompts ?? true),
+        tools: this.getEnvBoolean('OPENCODE_DEBUG_CAPTURE_TOOLS', config?.capture?.tools ?? true),
+        agents: this.getEnvBoolean('OPENCODE_DEBUG_CAPTURE_AGENTS', config?.capture?.agents ?? true),
+        skills: this.getEnvBoolean('OPENCODE_DEBUG_CAPTURE_SKILLS', config?.capture?.skills ?? true),
+        messages: this.getEnvBoolean('OPENCODE_DEBUG_CAPTURE_MESSAGES', config?.capture?.messages ?? true),
+        events: this.getEnvBoolean('OPENCODE_DEBUG_CAPTURE_EVENTS', config?.capture?.events ?? true),
       },
       redact: {
-        secrets: config?.redact?.secrets ?? true,
-        apiKeys: config?.redact?.apiKeys ?? true,
-        fileContents: config?.redact?.fileContents ?? false,
+        secrets: this.getEnvBoolean('OPENCODE_DEBUG_REDACT_SECRETS', config?.redact?.secrets ?? true),
+        apiKeys: this.getEnvBoolean('OPENCODE_DEBUG_REDACT_APIKEYS', config?.redact?.apiKeys ?? true),
+        fileContents: this.getEnvBoolean('OPENCODE_DEBUG_REDACT_FILECONTENTS', config?.redact?.fileContents ?? false),
       },
     };
+  }
+
+  private getEnvBoolean(envVar: string, defaultValue: boolean): boolean {
+    const envValue = process.env[envVar];
+    if (envValue === undefined) return defaultValue;
+    return envValue === 'true';
   }
 
   /**

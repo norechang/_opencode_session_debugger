@@ -302,35 +302,59 @@ npm run debug:analyze ses_abc123
 
 ### 4. Configure the Plugin (Optional)
 
-Customize plugin behavior in `.opencode/opencode.jsonc`:
+> **Important**: Due to OpenCode's JSON schema validation, custom plugin configuration keys in `opencode.jsonc` are not supported and will cause an error: `Unrecognized key: "opencode-session-debugger"`.
+> 
+> **Use environment variables instead** to configure the plugin.
+
+#### Configuration via Environment Variables
+
+The plugin supports configuration via environment variables:
+
+```bash
+# Enable/disable the plugin (default: true)
+export OPENCODE_DEBUG_ENABLED=true
+
+# Set log level: debug, info, warn, error (default: info)
+export OPENCODE_DEBUG_LOG_LEVEL=info
+
+# Set custom database directory (default: ~/.local/share/opencode-debug)
+export OPENCODE_DEBUG_DIR=/path/to/debug/dir
+
+# Selective capture
+export OPENCODE_DEBUG_CAPTURE_PROMPTS=true
+export OPENCODE_DEBUG_CAPTURE_TOOLS=true
+export OPENCODE_DEBUG_CAPTURE_AGENTS=true
+export OPENCODE_DEBUG_CAPTURE_SKILLS=true
+export OPENCODE_DEBUG_CAPTURE_MESSAGES=true
+export OPENCODE_DEBUG_CAPTURE_EVENTS=true
+
+# Redaction settings
+export OPENCODE_DEBUG_REDACT_SECRETS=true
+export OPENCODE_DEBUG_REDACT_APIKEYS=true
+export OPENCODE_DEBUG_REDACT_FILECONTENTS=false
+```
+
+For persistent configuration, add these to your shell profile (`~/.bashrc` or `~/.zshrc`).
+
+**See [CONFIGURATION.md](CONFIGURATION.md) for detailed configuration guide including:**
+- Complete list of environment variables
+- Usage examples (disable plugin, selective tracking, debug mode)
+- Persistent configuration setup
+- Project-specific configuration
+- Troubleshooting
+
+#### Minimal opencode.jsonc
+
+Your `.opencode/opencode.jsonc` only needs:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-session-debugger"],
-  "opencode-session-debugger": {
-    "enabled": true,
-    "logLevel": "info",
-    "storage": {
-      "type": "sqlite",
-      "path": ".opencode/debug/sessions.db"
-    },
-    "capture": {
-      "prompts": true,
-      "tools": true,
-      "agents": true,
-      "skills": true,
-      "messages": true,
-      "events": true
-    },
-    "redact": {
-      "secrets": true,
-      "apiKeys": true,
-      "fileContents": false
-    }
-  }
+  "plugin": ["opencode-session-debugger"]
 }
 ```
+
+All configuration is done via environment variables!
 
 ### 3. Start OpenCode
 
@@ -504,45 +528,77 @@ opencode-debug export ses_abc123 | jq '.stats'
 
 ## Configuration Options
 
-All configuration options are set in `.opencode/opencode.jsonc` under the `"opencode-session-debugger"` key.
+> **Important**: Due to OpenCode's schema validation, you cannot add custom plugin configuration keys to `opencode.jsonc`. Use environment variables instead.
 
-### `enabled` (boolean, default: `true`)
+All configuration is done via environment variables. Environment variables override any default values.
+
+### `OPENCODE_DEBUG_ENABLED` (boolean, default: `true`)
 
 Enable or disable the plugin.
 
-### `logLevel` (string, default: `"info"`)
+```bash
+export OPENCODE_DEBUG_ENABLED=false  # Disable plugin
+export OPENCODE_DEBUG_ENABLED=true   # Enable plugin
+```
+
+### `OPENCODE_DEBUG_LOG_LEVEL` (string, default: `"info"`)
 
 Logging verbosity: `"debug"`, `"info"`, `"warn"`, `"error"`
 
-### `storage.type` (string, default: `"sqlite"`)
+```bash
+export OPENCODE_DEBUG_LOG_LEVEL=debug
+```
 
-Database type (currently only SQLite is supported).
+### `OPENCODE_DEBUG_DIR` (string, optional)
 
-### `storage.path` (string, optional)
+Custom database directory. Defaults to `~/.local/share/opencode-debug`
 
-Custom database file path. Defaults to `~/.local/share/opencode-debug/sessions.db`
-
-Set via environment variable:
 ```bash
 export OPENCODE_DEBUG_DIR=/custom/path
 ```
 
-### `capture.*` (boolean, default: `true`)
+The database file will be created at `$OPENCODE_DEBUG_DIR/sessions.db`
+
+### Capture Options (boolean, default: `true`)
 
 Fine-grained control over what to capture:
-- `prompts`: User prompts and parsed parts
-- `tools`: Tool executions with params and results
-- `agents`: Agent invocations and switches
-- `skills`: Skill loading and usage
-- `messages`: Full message history
-- `events`: System events from OpenCode
 
-### `redact.*` (boolean)
+```bash
+# Capture user prompts and parsed parts
+export OPENCODE_DEBUG_CAPTURE_PROMPTS=true
+
+# Capture tool executions with params and results
+export OPENCODE_DEBUG_CAPTURE_TOOLS=true
+
+# Capture agent invocations and switches
+export OPENCODE_DEBUG_CAPTURE_AGENTS=true
+
+# Capture skill loading and usage
+export OPENCODE_DEBUG_CAPTURE_SKILLS=true
+
+# Capture full message history
+export OPENCODE_DEBUG_CAPTURE_MESSAGES=true
+
+# Capture system events from OpenCode
+export OPENCODE_DEBUG_CAPTURE_EVENTS=true
+```
+
+### Redaction Options (boolean)
 
 Privacy settings:
-- `secrets`: Redact secret values (default: `true`)
-- `apiKeys`: Redact API keys and tokens (default: `true`)
-- `fileContents`: Redact file contents in tool results (default: `false`)
+
+```bash
+# Redact secret values (default: true)
+export OPENCODE_DEBUG_REDACT_SECRETS=true
+
+# Redact API keys and tokens (default: true)
+export OPENCODE_DEBUG_REDACT_APIKEYS=true
+
+# Redact file contents in tool results (default: false)
+export OPENCODE_DEBUG_REDACT_FILECONTENTS=false
+```
+
+**See [CONFIGURATION.md](CONFIGURATION.md) for detailed configuration examples and troubleshooting.**
 
 ## Database Schema
 

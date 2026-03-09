@@ -215,6 +215,24 @@ export class DatabaseManager {
     // Bun sqlite transaction API
     return this.sqlite.transaction(fn)();
   }
+
+  /**
+   * Clear all trace records from the database
+   * This deletes all data from all tables
+   */
+  clearAllData(): void {
+    this.sqlite.exec(`
+      DELETE FROM chat_params;
+      DELETE FROM commands;
+      DELETE FROM events;
+      DELETE FROM skill_usages;
+      DELETE FROM agent_invocations;
+      DELETE FROM tool_executions;
+      DELETE FROM prompts;
+      DELETE FROM messages;
+      DELETE FROM sessions;
+    `);
+  }
 }
 
 // Singleton instance

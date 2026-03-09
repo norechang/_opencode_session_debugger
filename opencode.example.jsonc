@@ -1,25 +1,41 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-session-debugger"],
-  "opencode-session-debugger": {
-    "enabled": true,
-    "logLevel": "info",
-    "storage": {
-      "type": "sqlite",
-      "path": ".opencode/debug/sessions.db"
-    },
-    "capture": {
-      "prompts": true,
-      "tools": true,
-      "agents": true,
-      "skills": true,
-      "messages": true,
-      "events": true
-    },
-    "redact": {
-      "secrets": true,
-      "apiKeys": true,
-      "fileContents": false
-    }
-  }
+  "plugin": ["opencode-session-debugger"]
+
+  // NOTE: OpenCode's JSON schema does NOT allow custom plugin configuration keys
+  // The configuration below will cause an error: "Unrecognized key: opencode-session-debugger"
+  // 
+  // Use environment variables instead to configure the plugin.
+  // See CONFIGURATION.md for details.
+  //
+  // Example environment variables:
+  //   export OPENCODE_DEBUG_ENABLED=true
+  //   export OPENCODE_DEBUG_LOG_LEVEL=info
+  //   export OPENCODE_DEBUG_DIR=~/.local/share/opencode-debug
+  //   export OPENCODE_DEBUG_CAPTURE_TOOLS=true
+  //   export OPENCODE_DEBUG_CAPTURE_AGENTS=true
+  //
+  // For reference, this is what the configuration WOULD look like (but doesn't work):
+  // 
+  // "opencode-session-debugger": {
+  //   "enabled": true,
+  //   "logLevel": "info",
+  //   "storage": {
+  //     "type": "sqlite",
+  //     "path": ".opencode/debug/sessions.db"
+  //   },
+  //   "capture": {
+  //     "prompts": true,
+  //     "tools": true,
+  //     "agents": true,
+  //     "skills": true,
+  //     "messages": true,
+  //     "events": true
+  //   },
+  //   "redact": {
+  //     "secrets": true,
+  //     "apiKeys": true,
+  //     "fileContents": false
+  //   }
+  // }
 }
